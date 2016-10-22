@@ -5,10 +5,14 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+
 import model.Subject;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+
+import controller.ClockFacade;
 import model.Observer;
 
 @SuppressWarnings("serial")
@@ -19,13 +23,17 @@ public class DigitalClockGUI extends JPanel implements Observer {
 
 	// Frame
 	private static String windowTitle = "Digital Clock";
-	private static int width = 450;
-	private static int height = 130;
+	private static int width = 280;
+	private static int height = 260;
 
 	// Panel
 	private static JFrame ControlPanel = null;
 	private static JLabel Time;
-	private static String textTime;
+	private static String textHour;
+	private static String textMinute;
+	private static String textSecond;
+	private static int xDrawString = 20;
+	private static int yDrawString = 130;
 	Graphics2D graphSettings;
 
 	// Time
@@ -46,12 +54,14 @@ public class DigitalClockGUI extends JPanel implements Observer {
 	}
 
 	public DigitalClockGUI() {
-		this.setBackground(Color.WHITE);
+		this.setBackground(Color.black);
 		Time = new JLabel();
 		ControlPanel = new JFrame();
+		this.add(Time, BorderLayout.CENTER);
 	}
 
-	private void createTimeLabel() {
+	private void createTimeLabel(Graphics g) {
+		Graphics2D g2d = (Graphics2D) g;
 		
 		while(getHour() >= 24){
 			setHour(getHour() - 24);
@@ -64,13 +74,50 @@ public class DigitalClockGUI extends JPanel implements Observer {
 		while(getSecond() >= 60){
 			setSecond(getSecond() - 60);
 		}
+		
+		textHour = Integer.toString(getHour());
+		textMinute = Integer.toString(getMinute());
+		textSecond = Integer.toString(getSecond());
+		
+		g.setFont(new Font("serif", Font.BOLD, 40));
+		
+		if(ClockFacade.getInstance().returnClockState() == 0){//hora
+			g2d.setColor(Color.RED);
+			g2d.drawString(textHour, xDrawString, yDrawString);
+			g2d.setColor(Color.WHITE);
+			g2d.drawString(":", xDrawString + 60, yDrawString);
+			g2d.drawString(textMinute, xDrawString + 100, yDrawString);
+			g2d.drawString(":", xDrawString + 160, yDrawString);
+			g2d.drawString(textSecond, xDrawString + 200, yDrawString);
 
-		textTime = Integer.toString(getHour()) + " : " + Integer.toString(getMinute()) + " : "
-				+ Integer.toString(getSecond());
+		} else if(ClockFacade.getInstance().returnClockState() == 1){//minuto
+			g2d.setColor(Color.WHITE);
+			g2d.drawString(textHour, xDrawString, yDrawString);
+			g2d.drawString(":", xDrawString + 60, yDrawString);
+			g2d.setColor(Color.RED);
+			g2d.drawString(textMinute, xDrawString + 100, yDrawString);
+			g2d.setColor(Color.WHITE);
+			g2d.drawString(":", xDrawString + 160, yDrawString);
+			g2d.drawString(textSecond, xDrawString + 200, yDrawString);
 
-		Time.setText(textTime);
-		Time.setFont(new Font("serif", Font.BOLD, 40));
-		this.add(Time, BorderLayout.CENTER);
+			
+		} else if(ClockFacade.getInstance().returnClockState() == 2){//segundo
+			g2d.setColor(Color.WHITE);
+			g2d.drawString(textHour, xDrawString, yDrawString);
+			g2d.drawString(":", xDrawString + 60, yDrawString);
+			g2d.drawString(textMinute, xDrawString + 100, yDrawString);
+			g2d.drawString(":", xDrawString + 160, yDrawString);
+			g2d.setColor(Color.RED);
+			g2d.drawString(textSecond, xDrawString + 200, yDrawString);
+			
+		} else{//exibicao
+			g2d.setColor(Color.WHITE);
+			g2d.drawString(textHour, xDrawString, yDrawString);
+			g2d.drawString(":", xDrawString + 60, yDrawString);
+			g2d.drawString(textMinute, xDrawString + 100, yDrawString);
+			g2d.drawString(":", xDrawString + 160, yDrawString);
+			g2d.drawString(textSecond, xDrawString + 200, yDrawString);
+		}
 
 	}
 
@@ -84,20 +131,19 @@ public class DigitalClockGUI extends JPanel implements Observer {
 		ControlPanel.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		ControlPanel.setVisible(true);
 	}
-	
-	public void setTextColor(Color color){
-		Time.setForeground(color);
-	}
 
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		graphSettings = (Graphics2D) g;
-		this.createTimeLabel();
+		graphSettings.setRenderingHint(
+                RenderingHints.KEY_ANTIALIASING, 
+                RenderingHints.VALUE_ANTIALIAS_ON);
+		this.createTimeLabel(g);
 
 		revalidate();
 		repaint();
 	}
-
+	
 	public int getHour() {
 		return hour;
 	}

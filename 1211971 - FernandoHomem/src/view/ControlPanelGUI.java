@@ -2,12 +2,16 @@ package view;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JToggleButton;
 
 import controller.ClockFacade;
 
@@ -19,10 +23,10 @@ public class ControlPanelGUI extends JPanel {
 	// Frame
 	private static String windowTitle = "Control Panel";
 	private final static int width = 350;
-	private final static int height = 90;
+	private final static int height = 120;
 
 	// Panel
-	private static JButton[] buttons = new JButton[2];
+	private static JToggleButton[] buttons = new JToggleButton[2];
 	private static String buttonTitle01 = "Ajustar";
 	private static String buttonTitle02 = "Incrementar";
 
@@ -45,46 +49,101 @@ public class ControlPanelGUI extends JPanel {
 
 	private void createButtons() {
 
-		buttons[0] = new JButton(buttonTitle01);
-		buttons[1] = new JButton(buttonTitle02);
+		buttons[0] = new JToggleButton(buttonTitle01);
+		buttons[1] = new JToggleButton(buttonTitle02);
 		
-		buttons[0].addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent event){
-				clockfacade.SetNewStatusThread(false);
-				clockfacade.PressAjust();
-				DigitalClockGUI.getInstancce().setTextColor(Color.red);
-				if(clockfacade.getCurrentState() == clockfacade.getExibitionState()){
-					clockfacade.SetNewStatusThread(true);
-					clockfacade.StartThread();
-					DigitalClockGUI.getInstancce().setTextColor(Color.black);
+		buttons[0].addMouseListener(new MouseListener(){
+
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				// TODO Auto-generated method stub
+
+			}
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+				// TODO Auto-generated method stub
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+				if(buttons[0].isSelected()){
+					buttonAjustPressed();
 				}
 			}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
 		});
 		
-		buttons[1].addActionListener(new ActionListener(){
-			public void actionPerformed(ActionEvent event){
-				clockfacade.SetNewStatusThread(false);
+		buttons[1].addMouseListener(new MouseListener(){
+
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mousePressed(MouseEvent e) {
+				// TODO Auto-generated method stub
 				clockfacade.PressIncrement();
 				
-				if(clockfacade.getCurrentState() == clockfacade.getSelectedHourState()){
+				if(clockfacade.returnClockState() == 0){
 					clockfacade.CounPressedHour();
 				}
 				
-				if(clockfacade.getCurrentState() == clockfacade.getSelectedMinuteState()){
+				if(clockfacade.returnClockState() == 1){
 					clockfacade.CounPressedMinute();
 				}
 				
-				if(clockfacade.getCurrentState() == clockfacade.getSelectedSecondState()){
+				if(clockfacade.returnClockState() == 2){
 					clockfacade.CounPressedSecond();
 				}
+				
 			}
+
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseEntered(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void mouseExited(MouseEvent e) {
+				// TODO Auto-generated method stub
+				
+			}
+			
 		});
 
 		for (int i = 0; i < 2; i++) {
 			buttons[i].setBackground(Color.white);
+			buttons[i].setPreferredSize(new Dimension(80,80));
 			this.add(buttons[i], BorderLayout.CENTER);
 		}
 		
+	}
+	
+	private void buttonAjustPressed(){;
+		clockfacade.PressAjust();
 	}
 
 	public void createControlPanelGUI() {

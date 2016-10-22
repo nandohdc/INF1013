@@ -47,6 +47,24 @@ public class ClockFacade {
 		return clock.getSelectedSecondSetState();
 	}
 	
+	public int returnClockState(){
+		if(clock.getCurrentState() == clock.getSelectedHourSetState()){
+			return 0;
+		}
+		else if(clock.getCurrentState() == clock.getSelectedMinuteSetState()){
+			return 1;
+		}
+		else if(clock.getCurrentState() == clock.getSelectedSecondSetState()){
+			return 2;
+		}
+		else if(clock.getCurrentState() == clock.getExibitionSetState()){
+			return 3;
+		}
+		else{
+			return -1; // estado inválido
+		}
+	}
+	
 	public void HourIncrement(){
 		clock.incrementHour();
 	}
@@ -67,14 +85,6 @@ public class ClockFacade {
 		clock.pressIncrement();
 	}
 	
-	public void InterruptThread(){
-		clock.interruptThread();
-	}
-	
-	public void StartThread(){
-		clock.startThread();
-	}
-	
 	public void CounPressedHour(){
 		clock.CountPressedHour();
 	}
@@ -85,9 +95,6 @@ public class ClockFacade {
 	
 	public void CounPressedSecond(){
 		clock.CountPressedSecond();
-	}
-	public void SetNewStatusThread(boolean newStatusThread){
-		clock.setStateThread(newStatusThread);
 	}
 	
 	public static void FacadeRegistraObserver(Subject EngineClock){

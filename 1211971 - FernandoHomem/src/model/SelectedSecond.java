@@ -16,7 +16,7 @@ public class SelectedSecond implements ClockState {
 
 	@Override
 	public void BButtonPressed() {
-		System.out.println("Passando para o estado - Incrementar a Minuto");
+		System.out.println("Passando para o estado - Incrementar o Segundo");
 		clock.incrementSecond();
 		
 	}

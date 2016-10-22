@@ -1,8 +1,12 @@
 package model;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
-public class EngineClock implements Subject, Runnable {
+import javax.swing.Timer;
+
+public class EngineClock implements Subject, ActionListener {
 
 	// Design Pattern State - ClockState
 	private static ClockState clockCurrentState;
@@ -14,6 +18,10 @@ public class EngineClock implements Subject, Runnable {
 	// Creates an ArrayList to hold all observers
 	private static ArrayList<model.Observer> observers = new ArrayList<model.Observer>();
 
+	// Timer
+	private Timer timer;
+	private final int DELAY = 1000;
+
 	// Time
 	private static long milliseconds;
 	private static int Hour = 0;
@@ -23,14 +31,9 @@ public class EngineClock implements Subject, Runnable {
 	private static int pressedMinute;
 	private static int pressedSecond;
 
-	// Thread
-	private static Thread thread = null;
-	private static boolean isRunning = false;
-	private static boolean statusThread = false;
-
 	// Buttons Ajust and Increment
-	boolean buttonAjust;
-	boolean buttonIncrement;
+	boolean buttonAjust = false;
+	boolean buttonIncrement = false;
 
 	// Singleton da Class -- EngineClock
 	private static EngineClock EngineClockInstance = null;
@@ -57,25 +60,18 @@ public class EngineClock implements Subject, Runnable {
 		buttonAjust = false;
 		buttonIncrement = false;
 
-		// Starting thread
-		statusThread = true;
-		this.startThread();
+		// Starting Timer
+		timer = new Timer(DELAY, this);
+		timer.start();
 	}
 
 	private void StartClock(long milliseconds) {
 		int localHour, localMinute, localSecond;
 
-		// System.out.printf("%d\n",milliseconds );
-
-		localHour = (int) (milliseconds / (1000 * 60 * 60)) % 24;
+		localHour = (int) (milliseconds / (1000 * 60 * 60)) % 24 - 3;
 		localMinute = (int) (milliseconds / (1000 * 60)) % 60;
 		localSecond = (int) (milliseconds / (1000)) % 60;
 
-		// System.out.printf("%d\n",localHour );
-		// System.out.printf("%d\n",localMinute );
-		// System.out.printf("%d\n",localSecond );
-		System.out.printf("LocalMinute: %d - LocalMinute+PressedMinute: %d\n", localMinute,
-				localMinute + pressedMinute);
 		updateTime(localHour + pressedHour, localMinute + pressedMinute, localSecond + pressedSecond);
 	}
 
@@ -221,39 +217,15 @@ public class EngineClock implements Subject, Runnable {
 
 	/******************** End: Engine Clock - Observer ********************/
 
-	/******************** Start: Engine Clock - Thread ********************/
-	public void startThread() {
-		thread = new Thread(this);
-		thread.start();
-	}
+	/********************* Start: Engine Clock - actionPerformed ********************/
 
 	@Override
-	public void run() {
-		isRunning = true;
-		while (isRunning) {
-			if (statusThread) {
-				milliseconds = System.currentTimeMillis();
-				EngineClock.getInstance().StartClock(milliseconds);
-			}
+	public void actionPerformed(ActionEvent e) {
 
-			updateTime(getHour(), getMinute(), getSecond());
+		milliseconds = System.currentTimeMillis();
+		EngineClock.getInstance().StartClock(milliseconds);
 
-			try {
-				Thread.sleep(1);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-		}
-		thread = null;
 	}
 
-	public void interruptThread() {
-		thread.interrupt();
-	}
-
-	public void setStateThread(boolean newStatusThread) {
-		statusThread = newStatusThread;
-	}
-
-	/******************** End: Engine Clock - ********************/
+	/********************* End: Engine Clock - actionPerformed ********************/
 }

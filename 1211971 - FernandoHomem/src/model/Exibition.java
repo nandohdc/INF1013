@@ -11,25 +11,27 @@ public class Exibition implements ClockState {
 	public void AButtonPressed() {
 		System.out.println("Passando para o estado - Hora Selecionada");
 		clock.setClockState(clock.getSelectedHourSetState());
+		clock.buttonAjust = true;
 		
 	}
 
 	@Override
 	public void BButtonPressed() {
-		// TODO Auto-generated method stub
+		System.out.println("Você não pode incrementar nesse estado.");
+		clock.buttonIncrement = false;
 		
 	}
 
 	@Override
 	public void AButtonReleased() {
 		// TODO Auto-generated method stub
-		
+		clock.buttonAjust = false;
 	}
 
 	@Override
 	public void BButtonReleased() {
 		// TODO Auto-generated method stub
-		
+		clock.buttonIncrement = false;
 	}
 
 }
