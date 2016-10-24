@@ -1,4 +1,4 @@
-# INF1013 - 2016.1
+# INF1013 - 2016.2
 [English] - Software Design Course
 Project for the Software Design course at PUC-Rio
 
