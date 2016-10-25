@@ -1,9 +1,9 @@
 package model;
 
-public class Exibition implements ClockState {
-	EngineClock clock;
+public class Exhibition implements ClockState {
+EngineClock clock;
 	
-	public Exibition(EngineClock newClock){
+	public Exhibition(EngineClock newClock){
 		clock = newClock;
 	}
 
@@ -33,5 +33,6 @@ public class Exibition implements ClockState {
 		// TODO Auto-generated method stub
 		clock.buttonIncrement = false;
 	}
+
 
 }

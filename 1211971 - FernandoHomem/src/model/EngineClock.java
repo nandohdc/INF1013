@@ -50,7 +50,7 @@ public class EngineClock implements Subject, ActionListener {
 	public EngineClock() {
 
 		// Initializing - Design Pattern State
-		exibitionState = new Exibition(this);
+		exibitionState = new Exhibition(this);
 		selectedHourState = new SelectedHour(this);
 		selectedMinuteState = new SelectedMinute(this);
 		selectedSecondState = new SelectedSecond(this);

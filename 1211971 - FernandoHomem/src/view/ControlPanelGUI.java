@@ -94,21 +94,21 @@ public class ControlPanelGUI extends JPanel {
 			@Override
 			public void mousePressed(MouseEvent e) {
 				// TODO Auto-generated method stub
-				if (buttons[0].isSelected()) {
-					clockfacade.PressIncrement();
+					if (buttons[0].isSelected() && !buttons[1].isSelected()) {
+						clockfacade.PressIncrement();
 
-					if (clockfacade.returnClockState() == 0) {
-						clockfacade.CounPressedHour();
-					}
+						if (clockfacade.returnClockState() == 0) {
+							clockfacade.CounPressedHour();
+						}
 
-					if (clockfacade.returnClockState() == 1) {
-						clockfacade.CounPressedMinute();
-					}
+						if (clockfacade.returnClockState() == 1) {
+							clockfacade.CounPressedMinute();
+						}
 
-					if (clockfacade.returnClockState() == 2) {
-						clockfacade.CounPressedSecond();
+						if (clockfacade.returnClockState() == 2) {
+							clockfacade.CounPressedSecond();
+						}
 					}
-				}
 			}
 
 			@Override
